@@ -10,6 +10,11 @@ CORS(app)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+ALLOWED_EXTENSIONS = {'obj', 'stl'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/')
 def home():
     return "Welcome to the Flask file upload API!"
@@ -20,13 +25,17 @@ def upload_file():
         return jsonify({"error": "No file provided"}), 400
 
     file = request.files["file"]
+
+    if not allowed_file(file.filename):
+        return jsonify({"error": "Invalid file type. Only .obj and .stl are allowed"}), 400
+
     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(filepath)
 
     try:
         mesh = trimesh.load_mesh(filepath)
         volume = mesh.volume
-        return jsonify({"volume": volume})
+        return jsonify({"volume": volume, "vertices": len(mesh.vertices), "faces": len(mesh.faces)})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
