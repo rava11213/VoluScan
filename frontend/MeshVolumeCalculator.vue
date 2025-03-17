@@ -80,6 +80,9 @@
               scene.value.add(mesh.value);
             }
   
+            // Fit the camera to the new mesh
+            fitCameraToMesh(mesh.value);
+  
             // Calculate volume
             volume.value = calculateVolume(mesh.value);
           });
@@ -132,8 +135,28 @@
         return (1.0 / 6.0) * sum;
       };
   
+      // Adjust camera position based on the mesh size
+      const fitCameraToMesh = (mesh: THREE.Object3D) => {
+        if (!camera.value || !mesh) return;
+  
+        const boundingBox = new THREE.Box3().setFromObject(mesh);
+        const size = boundingBox.getSize(new THREE.Vector3());
+        const center = boundingBox.getCenter(new THREE.Vector3());
+  
+        // Make the camera fit the mesh
+        camera.value.position.z = size.length() * 1.5;
+        camera.value.lookAt(center);
+      };
+  
+      // Resize handling
       onMounted(() => {
         initThreeJS();
+        window.addEventListener('resize', handleResize);
+      });
+  
+      // Cleanup when component is unmounted
+      onUnmounted(() => {
+        window.removeEventListener('resize', handleResize);
       });
   
       return {
@@ -152,3 +175,4 @@
     border: 1px solid #ccc;
   }
   </style>
+  
