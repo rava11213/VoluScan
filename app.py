@@ -5,12 +5,16 @@ import numpy as np
 import os
 
 app = Flask(__name__)
-CORS(app)  
+CORS(app)
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-@app.route("/upload", methods=["POST"])
+@app.route('/')
+def home():
+    return "Welcome to the Flask file upload API!"
+
+@app.route('/upload', methods=["POST"])
 def upload_file():
     if "file" not in request.files:
         return jsonify({"error": "No file provided"}), 400
@@ -25,6 +29,10 @@ def upload_file():
         return jsonify({"volume": volume})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/favicon.ico')
+def favicon():
+    return '', 204  # No content for favicon
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
