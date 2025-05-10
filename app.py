@@ -3,6 +3,8 @@ from flask_cors import CORS
 import trimesh
 import numpy as np
 import os
+import uuid
+import traceback
 
 app = Flask(__name__)
 CORS(app)
@@ -29,15 +31,24 @@ def upload_file():
     if not allowed_file(file.filename):
         return jsonify({"error": "Invalid file type. Only .obj and .stl are allowed"}), 400
 
-    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+    # Create unique filename to avoid conflicts
+    filename = f"{uuid.uuid4().hex}_{file.filename}"
+    filepath = os.path.join(UPLOAD_FOLDER, filename)
     file.save(filepath)
 
     try:
-        mesh = trimesh.load_mesh(filepath)
+        mesh = trimesh.load_mesh(filepath, process=True)
         volume = mesh.volume
-        return jsonify({"volume": volume, "vertices": len(mesh.vertices), "faces": len(mesh.faces)})
+        bbox = mesh.bounding_box.extents.tolist()
+
+        return jsonify({
+            "volume": volume,
+            "vertices": len(mesh.vertices),
+            "faces": len(mesh.faces),
+            "bounding_box": bbox
+        })
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
 
 @app.route('/favicon.ico')
 def favicon():
