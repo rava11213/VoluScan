@@ -1,4 +1,4 @@
-# 🧨 VoluScan
+#  VoluScan
 
 **VoluScan** is an open-source web-based API designed to calculate the **volume of scanned 3D mesh objects**, such as masks or medical devices.
 
@@ -8,18 +8,16 @@ This project:
 * Calculates the 3D volume via a Python backend
 * Visualizes the object in real-time using **WebGPU** and **Three.js**
 
----
 
-## ⚙️ Tech Stack
+##  Tech Stack
 
 * **Backend**: Python (Flask)
 * **Frontend**: JavaScript (Vite + Three.js + WebGPU)
 * **File Parsing**: STL / OBJ / PLY
 * **UI**: HTML5 + CSS
 
----
 
-## 📦 Installation
+##  Installation
 
 ### 1. Clone the Repository
 
@@ -28,7 +26,6 @@ git clone https://github.com/rava11213/VoluScan.git
 cd VoluScan
 ```
 
----
 
 ### 2. Backend Setup (Flask)
 
@@ -66,18 +63,16 @@ npm run dev
 
 The frontend will be available at: [http://localhost:5173](http://localhost:5173)
 
----
 
-## 🔭 Features
+##  Features
 
 * Upload and process 3D mesh files
 * Calculate the volume of the object
 * View the 3D mesh interactively in-browser
 * Real-time rendering using WebGPU and Three.js
 
----
 
-## 📌 To Do / Future Plans
+##  Future Plans
 
 * [ ] Improve volume accuracy with better mesh geometry handling
 * [ ] Enable batch uploads and volume history
@@ -85,12 +80,12 @@ The frontend will be available at: [http://localhost:5173](http://localhost:5173
 * [ ] Unit conversion (mm³, cm³, in³)
 * [ ] Deploy to cloud platforms (e.g., Render, Vercel)
 
----
 
-## 🤝 Contributing
+
+##  Contributing
 
 PRs are welcome! For major changes, please [open an issue](https://github.com/rava11213/VoluScan/issues) first to discuss what you'd like to change.
 
----
+
 
 
